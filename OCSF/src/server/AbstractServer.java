@@ -194,7 +194,7 @@ public abstract class AbstractServer implements Runnable
   {
     Thread[] clientThreadList = getClientConnections();
 
-    for (int i=0; i<clientThreadList.length; i++)
+    for (int i=0; i<clientThreadList.length; i++) 
     {
       try
       {
