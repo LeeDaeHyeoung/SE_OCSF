@@ -24,22 +24,6 @@ public class SCCReciver extends Thread implements Runnable{
 			SCPacket packet = null;
 			try{
 				packet = (SCPacket)objInputStream.readObject();
-				if(packet.getMessage().equals("connectionSuccess")){
-					mainPanel.setRoom((Vector<SCRoom>)packet.getArgs()[0]);
-					mainPanel.writeMessage(packet.getMessage());
-				}
-				else if(packet.getMessage().equals("setRoom")){
-					mainPanel.setRoom((Vector<SCRoom>)packet.getArgs()[0]);
-				}
-				else if(packet.getMessage().equals("enterRoom")){
-					mainPanel.enterRoom((SCRoom)packet.getArgs()[0]);
-				}
-				else if(packet.getMessage().equals("readMessage")){
-					mainPanel.writeMessage((String)packet.getArgs()[0]);
-				}
-				else if(packet.getMessage().equals("Annoucement")){
-					mainPanel.Announcement_writeMessage((String)packet.getArgs()[0]);
-				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
