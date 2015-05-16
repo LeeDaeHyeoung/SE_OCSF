@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.ServerSocket;
+import java.sql.Date;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -108,7 +110,13 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 		msgBtn.setActionCommand("Send");
 		this.add(msgBtn);
 	}
-	
+	public void writeMessage(String m){
+		Calendar c = Calendar.getInstance();
+		int hour = c.get(Calendar.HOUR_OF_DAY);
+		int min = c.get(Calendar.MINUTE);
+		int sec = c.get(Calendar.SECOND);
+		messageArea.append("["+new Date(c.getTimeInMillis())+" "+hour+":"+min+":"+sec+"] "+m+"\n");
+	}
 	public void start() {
 		// TODO Auto-generated method stub
 		
