@@ -4,7 +4,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.Vector;
@@ -48,7 +51,7 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	
 	private ServerSocket sSocket;
 	private Vector<SCRoom> roomList;
-	
+	private Vector<SCSClientManager> clientList;
 	public ServerManagerPanel(){
 		super(new FlowLayout(FlowLayout.LEFT,8,4));
 		this.setPreferredSize(new Dimension(1000, 700));
@@ -140,7 +143,24 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	
 	public void start() {
 		// TODO Auto-generated method stub
-		
+		try {
+			sSocket = new ServerSocket(8000, 10);
+			writeMessage("Server Started");
+			room_writeMessage("Current Room");
+			client_writeMessage("Current Client");
+			
+			infoLabel.setText(" ServerAddress : "+InetAddress.getLocalHost().getHostAddress());
+			while(true){
+				Socket socket = sSocket.accept();
+				SCSClientManager clientManager = new SCSClientManager(socket,this);
+				clientManager.start();
+				clientList.add(clientManager);
+				client_writeMessage(clientList);
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
