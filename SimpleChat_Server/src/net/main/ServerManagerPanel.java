@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.net.ServerSocket;
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import object.shared.SCRoom;
 
 public class ServerManagerPanel extends JPanel implements ActionListener, Runnable {
 
@@ -44,6 +47,7 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	private JButton msgBtn;
 	
 	private ServerSocket sSocket;
+	private Vector<SCRoom> roomList;
 	
 	public ServerManagerPanel(){
 		super(new FlowLayout(FlowLayout.LEFT,8,4));
@@ -111,6 +115,7 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 		msgBtn.setActionCommand("Send");
 		this.add(msgBtn);
 	}
+	//MessageArea창에 쓰고자하는 메세지를 담당하는 기능 구현
 	public void writeMessage(String m){
 		Calendar c = Calendar.getInstance();
 		int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -118,6 +123,14 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 		int sec = c.get(Calendar.SECOND);
 		messageArea.append("["+new Date(c.getTimeInMillis())+" "+hour+":"+min+":"+sec+"] "+m+"\n");
 	}
+	//room Area창에 현재 존재하는 방을 만들어 주기위한 메소드
+	public void room_writeMessage(Vector<SCRoom> roomList){
+		room_messageArea.append(roomList.toString()+"\n");
+	}
+	public void room_writeMessage(String m){
+		room_messageArea.append(m+"\n");
+	}
+	
 	public void start() {
 		// TODO Auto-generated method stub
 		
@@ -140,5 +153,11 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	 */
 	public String getMessageArea() {
 		return messageArea.toString();
+	}
+	/*room messageArea값을 확인하기위해서 
+	 * test를 하기위해서 getter정의 
+	 */
+	public String getRoom_messageArea() {
+		return room_messageArea.toString();
 	}
 }
