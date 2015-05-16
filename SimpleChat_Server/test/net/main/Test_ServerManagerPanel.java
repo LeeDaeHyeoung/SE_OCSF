@@ -11,5 +11,17 @@ public class Test_ServerManagerPanel {
 		servermanagerpanel.writeMessage("server start");
 		Assert.assertEquals(servermanagerpanel.getMessageArea(),"server start");
 	}
+	@Test
+	public void test_room_writeMessage() {
+		ServerManagerPanel servermanagerpanel = new ServerManagerPanel();
+		servermanagerpanel.room_writeMessage("SE class");
+		Assert.assertEquals(servermanagerpanel.getRoom_messageArea(),"SE class");
+	}
+	@Test
+	public void test_client_writeMessage() {
+		ServerManagerPanel servermanagerpanel = new ServerManagerPanel();
+		servermanagerpanel.client_writeMessage("Lee Dae Hyeoung");
+		Assert.assertEquals(servermanagerpanel.getClient_messageArea(),"Lee Dae Hyeoung");
+	}
 
 }
