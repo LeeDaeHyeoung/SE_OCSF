@@ -30,6 +30,7 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	private JButton connectBtn;
 	
 	private JTextArea messageArea;
+
 	private JScrollPane scrollPane;
 	
 	private JTextArea room_messageArea;
@@ -133,5 +134,11 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	/*messageArea값을 확인하기위해서 
+	 * test를 하기위해서 getter정의 
+	 */
+	public String getMessageArea() {
+		return messageArea.toString();
+	}
 }
