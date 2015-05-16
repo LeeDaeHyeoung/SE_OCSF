@@ -130,6 +130,13 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	public void room_writeMessage(String m){
 		room_messageArea.append(m+"\n");
 	}
+	//client Area창에 현재 접속해 있는 모든 사람들을 표시해주기위한 메소드
+	public void client_writeMessage(Vector<SCSClientManager> clientList){
+		client_messageArea.append(clientList.toString()+"\n");
+	}
+	public void client_writeMessage(String m){
+		client_messageArea.append(m+"\n");
+	}
 	
 	public void start() {
 		// TODO Auto-generated method stub
@@ -159,5 +166,11 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	 */
 	public String getRoom_messageArea() {
 		return room_messageArea.toString();
+	}
+	/*client messageArea값을 확인하기위해서 
+	 * test를 하기위해서 getter정의 
+	 */
+	public String getClient_messageArea() {
+		return client_messageArea.toString();
 	}
 }
