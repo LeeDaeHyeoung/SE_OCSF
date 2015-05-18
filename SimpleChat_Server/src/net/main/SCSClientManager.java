@@ -40,6 +40,7 @@ public class SCSClientManager extends Thread implements Runnable{
 		while(true){
 			try {
 				SCPacket packet = (SCPacket)objInputStream.readObject();
+				process(packet);
 				serverManager.run();
 			} catch (Exception e) {
 				try {
@@ -55,4 +56,19 @@ public class SCSClientManager extends Thread implements Runnable{
 			}
 		}
 	}
+	private void process(SCPacket packet) {
+		SCPacket returnPacket = new SCPacket();
+		if(packet.getMessage().equals("applyConnection")){
+			returnPacket.setMessage("connectionSuccess");
+			returnPacket.setArgs(new Object[]{serverManager.getRoomList()});
+			serverManager.writeMessage(socket.getInetAddress().getHostAddress()+" Connected");
+			try {
+				objOutputStream.writeObject(returnPacket);
+				objOutputStream.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+		
 }
