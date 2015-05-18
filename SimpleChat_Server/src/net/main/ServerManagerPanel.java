@@ -162,6 +162,17 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 			e.printStackTrace();
 		}
 	}
+	public Vector<SCRoom> getRoomList(){
+		Vector<SCRoom> list = new Vector<SCRoom>();
+		list.addAll(roomList);
+		room_writeMessage(list);
+		return list;
+	}
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void run() {
@@ -169,12 +180,6 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 		
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	/*messageArea값을 확인하기위해서 
 	 * test를 하기위해서 getter정의 
 	 */
