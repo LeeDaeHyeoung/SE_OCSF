@@ -15,6 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import object.shared.SCRoom;
+
 public class SCCMainPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -116,6 +118,16 @@ public class SCCMainPanel extends JPanel implements ActionListener {
 			
 		}
 
+	public void writeMessage(String m){
+		Calendar c = Calendar.getInstance();
+		int hour = c.get(Calendar.HOUR_OF_DAY);
+		int min = c.get(Calendar.MINUTE);
+		int sec = c.get(Calendar.SECOND);
+		textArea.append("["+new Date(c.getTimeInMillis())+" "+hour+":"+min+":"+sec+"] "+m+"\n");
+	}
+	public void setRoom(Vector<SCRoom> list){
+		roomList.setRoomList(list);
+	}
 	
 	public void setRoomList(SCCRoomList roomList) {
 		this.roomList = roomList;
