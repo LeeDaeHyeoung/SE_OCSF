@@ -42,6 +42,16 @@ public class SCSClientManager extends Thread implements Runnable{
 				SCPacket packet = (SCPacket)objInputStream.readObject();
 				serverManager.run();
 			} catch (Exception e) {
+				try {
+					serverManager.writeMessage(socket.getInetAddress()+" Disconnected");
+					objInputStream.close();
+					objOutputStream.close();
+					socket.close();
+					return;
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
