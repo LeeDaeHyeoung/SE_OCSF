@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import net.main.SCCConnectionManager;
 import object.shared.SCRoom;
 
 public class SCCMainPanel extends JPanel implements ActionListener {
@@ -37,6 +38,8 @@ public class SCCMainPanel extends JPanel implements ActionListener {
 	private JLabel msgLabel;
 	private JTextField msgField;
 	private JButton msgBtn;
+	
+	private SCCConnectionManager connectionManager;
 	
 	private SCCRoomList roomList;
 	
@@ -136,7 +139,14 @@ public class SCCMainPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		if(e.getActionCommand().equals("Connect")){
+			connectionManager.connectionServer(addressField.getText(),portField.getText());
+			addressField.setEnabled(false);
+			portField.setEnabled(false);
+			connectBtn.setEnabled(false);
+			roomField.setEnabled(true);
+			roomBtn.setEnabled(true);
+		}
 	}
 	
 
