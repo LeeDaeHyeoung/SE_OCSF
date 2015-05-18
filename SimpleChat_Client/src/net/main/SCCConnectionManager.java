@@ -19,4 +19,25 @@ public class SCCConnectionManager {
 		super();
 		this.mainPanel = mainPanel;
 	}
+	public void connectionServer(String address,String string){
+		try {
+			socket = new Socket(address, Integer.parseInt(string));
+			objOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			objInputStream = new ObjectInputStream(socket.getInputStream());
+			objOutputStream.writeObject(new SCPacket("applyConnection",new Object[]{}));
+			objOutputStream.flush();
+			reciver = new SCCReciver(objInputStream,mainPanel);
+			reciver.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void send(SCPacket packet) {
+		try {
+		objOutputStream.writeObject(packet);
+		objOutputStream.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
