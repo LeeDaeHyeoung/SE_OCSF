@@ -52,9 +52,15 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	private ServerSocket sSocket;
 	private Vector<SCRoom> roomList;
 	private Vector<SCSClientManager> clientList;
+	
+	
 	public ServerManagerPanel(){
 		super(new FlowLayout(FlowLayout.LEFT,8,4));
 		this.setPreferredSize(new Dimension(1000, 700));
+		
+		clientList = new Vector<SCSClientManager>();
+		roomList = new Vector<SCRoom>();
+		
 		serverstateLabel = new JLabel(" ServerState : ");
 		serverstateLabel.setPreferredSize(new Dimension(150,20));
 		this.add(serverstateLabel);
@@ -168,6 +174,25 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 		room_writeMessage(list);
 		return list;
 	}
+	
+	
+	public SCRoom createRoom(String roomName){
+		SCRoom room = new SCRoom(roomName, roomList.size());
+		roomList.add(room);
+		for(SCSClientManager clientManager : clientList){
+			clientManager.setRoom(getRoomList());
+		}
+		return room;
+	}
+	
+	public void enterClient(SCRoom room, String address) {
+		for(SCSClientManager clientManager : clientList){
+			if(clientManager.getRoonNum() == room.getRoomNum()){
+				clientManager.sendMassge(address+" 가 입장하였습니다.");
+			}
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
