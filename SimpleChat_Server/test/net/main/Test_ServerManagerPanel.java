@@ -1,5 +1,7 @@
 package net.main;
 
+import java.awt.event.ActionEvent;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,5 +25,11 @@ public class Test_ServerManagerPanel {
 		servermanagerpanel.client_writeMessage("Lee Dae Hyeoung");
 		Assert.assertEquals(servermanagerpanel.getClient_messageArea(),"Lee Dae Hyeoung");
 	}
-
+	@Test
+	public void test_Announcement() {
+		ServerManagerPanel servermanagerpanel = new ServerManagerPanel();
+		servermanagerpanel.actionPerformed(new ActionEvent(1, 0, "Connect"));
+		servermanagerpanel.actionPerformed(new ActionEvent(1, 0, "Send"));
+		//To Do confirm message
+	}
 }

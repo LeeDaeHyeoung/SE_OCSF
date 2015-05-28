@@ -188,15 +188,30 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	public void enterClient(SCRoom room, String address) {
 		for(SCSClientManager clientManager : clientList){
 			if(clientManager.getRoonNum() == room.getRoomNum()){
-				clientManager.sendMassge(address+" 가 입장하였습니다.");
+				clientManager.sendMessage(address+" 가 입장하였습니다.");
 			}
+		}
+	}
+	
+	public void announcement_Allclient(){
+		for(SCSClientManager clientManager : clientList){
+			clientManager.Announcement("Announcement : "+msgField.getText());
 		}
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		if(arg0.getActionCommand().equals("Connect")){
+			portField.setEnabled(false);
+			connectBtn.setEnabled(false);
+			msgField.setEnabled(true);
+			msgBtn.setEnabled(true);
+		}
+		else if(arg0.getActionCommand().equals("Send")){
+			announcement_Allclient();
+			msgField.setText("");
+		}
 	}
 
 	@Override

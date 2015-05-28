@@ -87,10 +87,22 @@ public class SCSClientManager extends Thread implements Runnable {
 		}
 	}
 	
-	public void sendMassge(String msg){
+	public void sendMessage(String msg){
 		try {
 			SCPacket returnPacket = new SCPacket();
 			returnPacket.setMessage("readMessage");
+			returnPacket.setArgs(new Object[]{msg});
+			objOutputStream.writeObject(returnPacket);
+			objOutputStream.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void Announcement(String msg){
+		try {
+			SCPacket returnPacket = new SCPacket();
+			returnPacket.setMessage("Annoucement");
 			returnPacket.setArgs(new Object[]{msg});
 			objOutputStream.writeObject(returnPacket);
 			objOutputStream.flush();
