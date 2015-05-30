@@ -85,6 +85,23 @@ public class SCSClientManager extends Thread implements Runnable {
 				serverManager.enterClient(room, socket.getInetAddress().getHostAddress());
 			}
 		}
+		else if(packet.getMessage().equals("enterRoom")){
+			room = new SCRoom((SCRoom)packet.getArgs()[0]);
+			try {
+				returnPacket.setMessage("enterRoom");
+				returnPacket.setArgs(new Object[]{room});
+				objOutputStream.writeObject(returnPacket);
+				objOutputStream.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			serverManager.enterClient(room, socket.getInetAddress().getHostAddress());
+		}
+		else if(packet.getMessage().equals("writeMessage")){
+			serverManager.sendMessge(packet, room.getRoomNum());
+			returnPacket.setMessage("writtenMessage");
+			returnPacket.setArgs(new Object[]{});
+		}
 	}
 	
 	public void sendMessage(String msg){

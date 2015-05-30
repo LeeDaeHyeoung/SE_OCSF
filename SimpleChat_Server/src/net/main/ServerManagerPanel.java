@@ -19,6 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import object.shared.SCPacket;
 import object.shared.SCRoom;
 
 public class ServerManagerPanel extends JPanel implements ActionListener, Runnable {
@@ -199,6 +200,15 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 		}
 	}
 	
+	public void sendMessge(SCPacket packet, int roomNum){
+		for(SCSClientManager clientManager : clientList){
+			if(clientManager.getRoonNum() == roomNum){
+				System.out.println(clientManager.getRoonNum());
+				clientManager.sendMessage((String)packet.getArgs()[0]);
+			}
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
@@ -213,7 +223,7 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 			msgField.setText("");
 		}
 	}
-
+	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -238,4 +248,5 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	public String getClient_messageArea() {
 		return client_messageArea.toString();
 	}
+	
 }
