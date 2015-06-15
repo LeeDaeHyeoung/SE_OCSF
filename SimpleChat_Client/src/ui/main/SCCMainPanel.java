@@ -160,7 +160,7 @@ public class SCCMainPanel extends JPanel implements ActionListener {
 	}
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("Connect")){
-			connectionManager.connectServer(addressField.getText(),portField.getText());
+			connectionManager.connectionServer(addressField.getText(),portField.getText());
 			addressField.setEnabled(false);
 			portField.setEnabled(false);
 			connectBtn.setEnabled(false);
