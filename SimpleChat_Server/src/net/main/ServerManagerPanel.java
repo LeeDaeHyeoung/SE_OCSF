@@ -194,6 +194,14 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 		}
 	}
 	
+	public void exitClient(SCRoom room,String address){
+		for(SCSClientManager clientManager : clientList){
+			if((clientManager.getRoonNum() == room.getRoomNum())&&(clientManager.getRoonNum() != -1)){
+				clientManager.sendMessage(address+" 가 퇴장하였습니다.");
+				room.setRoomNum(-1);
+			}
+		}
+	}
 	public void announcement_Allclient(){
 		for(SCSClientManager clientManager : clientList){
 			clientManager.Announcement("Announcement : "+msgField.getText());

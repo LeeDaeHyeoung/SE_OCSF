@@ -35,10 +35,15 @@ public class SCCRoomList extends JList implements MouseListener {
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		mainPanel.applyEnterRoom((SCRoom) this.getSelectedValue());
 	}
 
 	public void mouseClicked(MouseEvent e) {
+		if(e.getClickCount() == 1 ){
+			mainPanel.applyEnterRoom((SCRoom) this.getSelectedValue());
+		}
+		else if(e.getClickCount() == 2){
+			mainPanel.applyExitRoom((SCRoom)this.getSelectedValue());
+		}
 	}
 
 	public void mouseEntered(MouseEvent e) {

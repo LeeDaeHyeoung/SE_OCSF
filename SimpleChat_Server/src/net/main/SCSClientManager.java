@@ -102,6 +102,17 @@ public class SCSClientManager extends Thread implements Runnable {
 			returnPacket.setMessage("writtenMessage");
 			returnPacket.setArgs(new Object[]{});
 		}
+		else if(packet.getMessage().equals("exitRoom")){
+			try{
+				returnPacket.setMessage("exitRoom");
+				returnPacket.setArgs(new Object[]{room});
+				objOutputStream.writeObject(returnPacket);
+				objOutputStream.flush();
+			} catch(IOException e){
+				e.printStackTrace();
+			}
+			serverManager.exitClient(room, socket.getInetAddress().getHostAddress());
+		}
 	}
 	
 	public void sendMessage(String msg){

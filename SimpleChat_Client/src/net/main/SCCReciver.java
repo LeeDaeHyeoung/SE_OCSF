@@ -40,6 +40,9 @@ public class SCCReciver extends Thread implements Runnable{
 				else if(packet.getMessage().equals("Annoucement")){
 					mainPanel.Announcement_writeMessage((String)packet.getArgs()[0]);
 				}
+				else if(packet.getMessage().equals("exitRoom")){
+					mainPanel.exitRoom((SCRoom)packet.getArgs()[0]);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

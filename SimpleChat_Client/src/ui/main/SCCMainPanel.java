@@ -157,6 +157,10 @@ public class SCCMainPanel extends JPanel implements ActionListener {
 		msgBtn.setEnabled(true);
 	}
 	public void exitRoom(SCRoom room){
+		writeMessage(currentRoom.getRoomName()+" ¹æ¿¡¼­ ÅðÀåÇÏ¼Ì½À´Ï´Ù.");
+		currentRoom = new SCRoom();
+		msgField.setEnabled(false);
+		msgBtn.setEnabled(false);
 	}
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("Connect")){
@@ -175,5 +179,12 @@ public class SCCMainPanel extends JPanel implements ActionListener {
 			msgField.setText("");
 		}
 		
+	}
+
+	public void applyExitRoom(SCRoom room) {
+		// TODO Auto-generated method stub
+		if(currentRoom.getRoomNum() == room.getRoomNum()){
+			connectionManager.send(new SCPacket("exitRoom", new Object[]{room}));
+		}
 	}
 }
