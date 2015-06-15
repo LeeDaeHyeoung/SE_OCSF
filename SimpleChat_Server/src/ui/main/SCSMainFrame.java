@@ -17,9 +17,4 @@ public class SCSMainFrame extends JFrame {
 		this.setContentPane(mainPanel);
 		this.pack();
 	}
-
-	public void runServer() {
-		// TODO Auto-generated method stub
-//		mainPanel.start();
-	}
 }

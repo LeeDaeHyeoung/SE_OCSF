@@ -1,5 +1,7 @@
 package net.main;
 
+import static org.junit.Assert.*;
+
 import java.awt.event.ActionEvent;
 
 import org.junit.Assert;
@@ -28,8 +30,13 @@ public class Test_ServerManagerPanel {
 	@Test
 	public void test_Announcement() {
 		ServerManagerPanel servermanagerpanel = new ServerManagerPanel();
-		servermanagerpanel.actionPerformed(new ActionEvent(1, 0, "Connect"));
-		servermanagerpanel.actionPerformed(new ActionEvent(1, 0, "Send"));
+		servermanagerpanel.actionPerformed(new ActionEvent(1, 0, "ServerStart"));
+		Assert.assertEquals(servermanagerpanel.getServerControlBtnMsg(),"erver terminate");
 		//To Do confirm message
+	}
+	@Test
+	public void test_ServerStart() {
+		ServerManagerPanel serverManagerPanel = new ServerManagerPanel();
+		serverManagerPanel.startServer();
 	}
 }

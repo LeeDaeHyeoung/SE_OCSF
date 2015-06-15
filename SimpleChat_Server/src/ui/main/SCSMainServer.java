@@ -16,7 +16,6 @@ public class SCSMainServer {
 		}
 		SCSMainFrame frame = new SCSMainFrame();
 		frame.setVisible(true);
-		frame.runServer();
 	}
 
 }

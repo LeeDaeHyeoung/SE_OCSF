@@ -17,6 +17,7 @@ public class SCSClientManager extends Thread implements Runnable {
 	private ServerManagerPanel serverManager;
 
 	private SCRoom room;
+	private Boolean stop = false;
 
 	public SCSClientManager(Socket socket, ServerManagerPanel mainPanel) {
 		super();
@@ -38,23 +39,12 @@ public class SCSClientManager extends Thread implements Runnable {
 	}
 
 	public void run() {
-		while (true) {
+		while (!stop) {
 			try {
 				SCPacket packet = (SCPacket) objInputStream.readObject();
 				process(packet);
 				serverManager.run();
 			} catch (Exception e) {
-				try {
-					serverManager.writeMessage(socket.getInetAddress()
-							+ " Disconnected");
-					objInputStream.close();
-					objOutputStream.close();
-					socket.close();
-					return;
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 			}
 		}
 	}
@@ -156,5 +146,29 @@ public class SCSClientManager extends Thread implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void destroy() {
+		try {
+			SCPacket returnPacket = new SCPacket();
+			returnPacket.setMessage("Terminate");
+			objOutputStream.writeObject(returnPacket);
+			objOutputStream.flush();
+			
+			objInputStream.close();
+			objOutputStream.close();
+			socket.close();
+			serverManager.writeMessage(socket.getInetAddress()
+					+ " Disconnected");
+			
+			return;
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
+	public void stopManager(){
+		stop = true;
 	}
 }

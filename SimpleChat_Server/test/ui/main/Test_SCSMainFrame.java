@@ -9,7 +9,6 @@ public class Test_SCSMainFrame {
 	@Test
 	public void test_() {
 		SCSMainFrame scsmainframe = new SCSMainFrame();
-		scsmainframe.runServer();
 	}
 
 }
