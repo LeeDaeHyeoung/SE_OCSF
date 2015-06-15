@@ -1,8 +1,11 @@
 package net.main;
 
+import java.awt.event.ActionEvent;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 import object.shared.SCPacket;
 import ui.main.SCCMainPanel;
@@ -19,17 +22,23 @@ public class SCCConnectionManager {
 		super();
 		this.mainPanel = mainPanel;
 	}
-	public void connectionServer(String address,String string){
+	public Boolean connectionServer(String address,String string){
+		SocketAddress socketAddress = new InetSocketAddress(address,Integer.parseInt(string));
+		socket = new Socket();
+		int timeout = 3000;
 		try {
-			socket = new Socket(address, Integer.parseInt(string));
+			socket.setSoTimeout(timeout);
+			socket.connect(socketAddress,timeout);
 			objOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			objInputStream = new ObjectInputStream(socket.getInputStream());
 			objOutputStream.writeObject(new SCPacket("applyConnection",new Object[]{}));
 			objOutputStream.flush();
 			reciver = new SCCReciver(objInputStream,mainPanel);
 			reciver.start();
+			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			mainPanel.connectFail();
+			return false;
 		}
 	}
 	public void send(SCPacket packet) {
