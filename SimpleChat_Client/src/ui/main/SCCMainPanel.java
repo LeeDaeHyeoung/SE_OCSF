@@ -197,8 +197,17 @@ public class SCCMainPanel extends JPanel implements ActionListener {
 					new Object[] { room }));
 		}
 	}
-
-	public void connectFail() {
-		announcementArea.append("Server Connction Failed");
+	
+	public Boolean applyExitServer(){
+		if(connectionManager.exitServer()){
+			addressField.setEnabled(true);
+			portField.setEnabled(true);
+			connectBtn.setEnabled(true);
+			roomField.setEnabled(false);
+			roomBtn.setEnabled(false);
+			return true;
+		}
+		return false;
 	}
+	
 }

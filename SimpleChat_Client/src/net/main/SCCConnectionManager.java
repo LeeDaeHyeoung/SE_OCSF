@@ -27,7 +27,6 @@ public class SCCConnectionManager {
 		socket = new Socket();
 		int timeout = 3000;
 		try {
-			socket.setSoTimeout(timeout);
 			socket.connect(socketAddress,timeout);
 			objOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			objInputStream = new ObjectInputStream(socket.getInputStream());
@@ -37,7 +36,7 @@ public class SCCConnectionManager {
 			reciver.start();
 			return true;
 		} catch (Exception e) {
-			mainPanel.connectFail();
+			mainPanel.writeMessage("Server Connction Failed");
 			return false;
 		}
 	}
@@ -47,6 +46,18 @@ public class SCCConnectionManager {
 		objOutputStream.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public Boolean exitServer(){
+		try {
+			objInputStream.close();
+			objOutputStream.close();
+			socket.close();
+			mainPanel.writeMessage("Server Connction termination");
+			return true;
+		} catch (Exception e) {
+			return false;
 		}
 	}
 }
