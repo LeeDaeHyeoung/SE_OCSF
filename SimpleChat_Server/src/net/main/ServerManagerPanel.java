@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.Vector;
@@ -150,25 +151,38 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	
 	public void start() {
 		// TODO Auto-generated method stub
-		try {
-			sSocket = new ServerSocket(8000, 10);
-			writeMessage("Server Started");
-			room_writeMessage("Current Room");
-			client_writeMessage("Current Client");
-			
-			infoLabel.setText(" ServerAddress : "+InetAddress.getLocalHost().getHostAddress());
-			while(true){
-				Socket socket = sSocket.accept();
-				SCSClientManager clientManager = new SCSClientManager(socket,this);
-				clientManager.start();
-				clientList.add(clientManager);
-				client_writeMessage(clientList);
-			}
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			Thread connectThread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					try {
+						sSocket = new ServerSocket(Integer.valueOf(portField.getText()), 10);
+						writeMessage("Server Started");
+						room_writeMessage("Current Room");
+						client_writeMessage("Current Client");
+						infoLabel.setText(" ServerAddress : "+InetAddress.getLocalHost().getHostAddress());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					while(true){
+						Socket socket;
+						try {
+							socket = sSocket.accept();
+							SCSClientManager clientManager = new SCSClientManager(socket,ServerManagerPanel.this);
+							clientManager.start();
+							clientList.add(clientManager);
+							client_writeMessage(clientList);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			});
+			connectThread.start();
 	}
+	
 	public Vector<SCRoom> getRoomList(){
 		Vector<SCRoom> list = new Vector<SCRoom>();
 		list.addAll(roomList);
@@ -225,6 +239,7 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 			connectBtn.setEnabled(false);
 			msgField.setEnabled(true);
 			msgBtn.setEnabled(true);
+			start();
 		}
 		else if(arg0.getActionCommand().equals("Send")){
 			announcement_Allclient();
@@ -235,7 +250,6 @@ public class ServerManagerPanel extends JPanel implements ActionListener, Runnab
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	/*messageArea값을 확인하기위해서 

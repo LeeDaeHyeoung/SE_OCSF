@@ -20,6 +20,6 @@ public class SCSMainFrame extends JFrame {
 
 	public void runServer() {
 		// TODO Auto-generated method stub
-		mainPanel.start();
+//		mainPanel.start();
 	}
 }
