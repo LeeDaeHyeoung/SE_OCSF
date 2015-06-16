@@ -213,5 +213,9 @@ public class SCCMainPanel extends JPanel implements ActionListener {
 		}
 		return false;
 	}
+	public void blockMessage(String string) {
+		// TODO Auto-generated method stub
+		writeMessage(string);
+	}
 	
 }

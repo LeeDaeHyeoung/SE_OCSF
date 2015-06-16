@@ -20,10 +20,20 @@ public class SCSClientManager extends Thread implements Runnable {
 	private SCRoom room;
 	private Boolean stop = false;
 
+	private String[] message;
+	private int count;
+	
 	public SCSClientManager(Socket socket, ServerManagerPanel mainPanel) {
 		super();
 		this.socket = socket;
 		this.serverManager = mainPanel;
+
+		message = new String[5];
+		for(int i = 0; i<5;i++){
+			message[i]="";
+		}
+		
+		count=0;
 
 		room = new SCRoom();
 
@@ -110,13 +120,32 @@ public class SCSClientManager extends Thread implements Runnable {
 	public void sendMessage(String msg) {
 		try {
 			SCPacket returnPacket = new SCPacket();
-			returnPacket.setMessage("readMessage");
-			returnPacket.setArgs(new Object[] { msg });
-			objOutputStream.writeObject(returnPacket);
-			objOutputStream.flush();
+			if(block(msg)){
+				returnPacket.setMessage("blockMessage");
+				returnPacket.setArgs(new Object[]{"채팅이 차단되었습니다."});
+				objOutputStream.writeObject(returnPacket);
+				objOutputStream.flush();
+			}
+			else{
+				returnPacket.setMessage("readMessage");
+				returnPacket.setArgs(new Object[] { msg });
+				objOutputStream.writeObject(returnPacket);
+				objOutputStream.flush();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Boolean block (String msg){
+		Boolean equals = true;
+		message[count] = msg;
+		for(int i=0;i<5;i++){
+			equals = message[count].equalsIgnoreCase(message[(count+1)%5]);
+			equals &=equals;
+		}
+		count=(count+1)%5;
+		return equals;
 	}
 
 	public void Announcement(String msg) {

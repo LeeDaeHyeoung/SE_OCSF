@@ -42,6 +42,8 @@ public class SCCReciver extends Thread implements Runnable {
 				} else if (packet.getMessage().equals("Terminate")) {
 					stop = true;
 					mainPanel.applyExitServer();
+				} else if(packet.getMessage().equals("blockMessage")){
+					mainPanel.blockMessage((String)packet.getArgs()[0]);
 				}
 			} catch (Exception e) {
 				stop = true;
