@@ -44,7 +44,8 @@ public class SCCReciver extends Thread implements Runnable {
 					mainPanel.applyExitServer();
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				stop = true;
+//				e.printStackTrace();
 			}
 		}
 	}
