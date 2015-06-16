@@ -45,7 +45,6 @@ public class SCCReciver extends Thread implements Runnable {
 				}
 			} catch (Exception e) {
 				stop = true;
-//				e.printStackTrace();
 			}
 		}
 	}

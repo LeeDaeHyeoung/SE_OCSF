@@ -14,25 +14,28 @@ public class SCCConnectionManager {
 	private Socket socket;
 	private ObjectOutputStream objOutputStream;
 	private ObjectInputStream objInputStream;
-	
+
 	private SCCMainPanel mainPanel;
 	private SCCReciver reciver;
-	
+
 	public SCCConnectionManager(SCCMainPanel mainPanel) {
 		super();
 		this.mainPanel = mainPanel;
 	}
-	public Boolean connectionServer(String address,String string){
-		SocketAddress socketAddress = new InetSocketAddress(address,Integer.parseInt(string));
+
+	public boolean connectionServer(String address, String string) {
+		SocketAddress socketAddress = new InetSocketAddress(address,
+				Integer.parseInt(string));
 		socket = new Socket();
 		int timeout = 3000;
 		try {
-			socket.connect(socketAddress,timeout);
+			socket.connect(socketAddress, timeout);
 			objOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			objInputStream = new ObjectInputStream(socket.getInputStream());
-			objOutputStream.writeObject(new SCPacket("applyConnection",new Object[]{}));
+			objOutputStream.writeObject(new SCPacket("applyConnection",
+					new Object[] {}));
 			objOutputStream.flush();
-			reciver = new SCCReciver(objInputStream,mainPanel);
+			reciver = new SCCReciver(objInputStream, mainPanel);
 			reciver.start();
 			return true;
 		} catch (Exception e) {
@@ -40,16 +43,18 @@ public class SCCConnectionManager {
 			return false;
 		}
 	}
-	public void send(SCPacket packet) {
+
+	public boolean send(SCPacket packet) {
 		try {
-		objOutputStream.writeObject(packet);
-		objOutputStream.flush();
+			objOutputStream.writeObject(packet);
+			objOutputStream.flush();
+			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			return false;
 		}
 	}
-	
-	public Boolean exitServer(){
+
+	public boolean exitServer() {
 		try {
 			objInputStream.close();
 			objOutputStream.close();

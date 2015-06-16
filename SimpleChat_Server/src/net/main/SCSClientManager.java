@@ -49,7 +49,6 @@ public class SCSClientManager extends Thread implements Runnable {
 				destroy();
 			}
 		}
-		// destroy();
 	}
 
 	private void process(SCPacket packet) {
@@ -156,7 +155,7 @@ public class SCSClientManager extends Thread implements Runnable {
 
 	public void destroy() {
 		stop = true;
-//		try { 
+//		try {
 //			SCPacket returnPacket = new SCPacket();
 //			returnPacket.setMessage("Terminate");
 //			objOutputStream.writeObject(returnPacket);

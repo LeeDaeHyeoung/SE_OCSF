@@ -135,6 +135,10 @@ public class SCCMainPanel extends JPanel implements ActionListener {
 		textArea.append("[" + new Date(c.getTimeInMillis()) + " " + hour + ":"
 				+ min + ":" + sec + "] " + m + "\n");
 	}
+	
+	public JTextArea getTextArea(){
+		return textArea;
+	}
 
 	public void Announcement_writeMessage(String m) {
 		announcementArea.append(m + "\n");
