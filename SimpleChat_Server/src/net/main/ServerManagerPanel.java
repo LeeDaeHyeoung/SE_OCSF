@@ -158,7 +158,12 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 			client_messageArea.append(tempList.getClientAddress() + "\n");
 		}
 	}
-
+	public void updateRoom(){
+		room_messageArea.setText("Current Room\n");
+		for(SCRoom temproom : roomList){
+			room_messageArea.append(temproom.getRoomName()+"\n");
+		}
+	}
 	public void client_writeMessage(String m) {
 		client_messageArea.append(m + "\n");
 	}
@@ -171,11 +176,13 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 					sSocket = new ServerSocket(Integer.valueOf(portField
 							.getText()), 10);
 					writeMessage(messageArea,"Server Started");
-					room_writeMessage("Current Room");
+					updateRoom();
 					updateClients();
 					infoLabel.setText(" ServerAddress : "
 							+ InetAddress.getLocalHost().getHostAddress());
 					while (!stop) {
+						updateRoom();
+						updateClients();
 						Socket socket;
 						socket = sSocket.accept();
 						SCSClientManager clientManager = new SCSClientManager(
@@ -183,8 +190,6 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 						clientManager.start();
 						clientList.add(clientManager);
 						writeMessage(client_messageArea, clientManager.getRoomName());
-						
-						updateClients();
 					}
 				} catch (IOException e) {
 					terminateServer();
@@ -214,7 +219,6 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 	public Vector<SCRoom> getRoomList() {
 		Vector<SCRoom> list = new Vector<SCRoom>();
 		list.addAll(roomList);
-		room_writeMessage(list);
 		return list;
 	}
 

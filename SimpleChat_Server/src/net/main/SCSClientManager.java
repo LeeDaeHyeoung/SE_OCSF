@@ -54,7 +54,7 @@ public class SCSClientManager extends Thread implements Runnable {
 			try {
 				SCPacket packet = (SCPacket) objInputStream.readObject();
 				process(packet);
-				serverManager.run();
+				serverManager.updateRoom();
 			} catch (Exception e) {
 				destroy();
 			}
@@ -112,8 +112,7 @@ public class SCSClientManager extends Thread implements Runnable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			serverManager.exitClient(room, socket.getInetAddress()
-					.getHostAddress());
+			serverManager.exitClient(room, socket.getInetAddress().getHostAddress());
 		}
 	}
 
@@ -184,18 +183,18 @@ public class SCSClientManager extends Thread implements Runnable {
 
 	public void destroy() {
 		stop = true;
-//		try {
-//			SCPacket returnPacket = new SCPacket();
-//			returnPacket.setMessage("Terminate");
-//			objOutputStream.writeObject(returnPacket);
-//			objOutputStream.flush();
-//			objInputStream.close();
-//			objOutputStream.close();
-//			socket.close();
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
+		try {
+			SCPacket returnPacket = new SCPacket();
+			returnPacket.setMessage("Terminate");
+			objOutputStream.writeObject(returnPacket);
+			objOutputStream.flush();
+			objInputStream.close();
+			objOutputStream.close();
+			socket.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		serverManager.writeMessage(serverManager.getMessageArea(),
 				socket.getInetAddress() + " Disconnected");
 		serverManager.clientClose(SCSClientManager.this);
