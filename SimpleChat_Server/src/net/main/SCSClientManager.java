@@ -3,6 +3,7 @@ package net.main;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Vector;
 
@@ -54,7 +55,7 @@ public class SCSClientManager extends Thread implements Runnable {
 		if (packet.getMessage().equals("applyConnection")) {
 			returnPacket.setMessage("connectionSuccess");
 			returnPacket.setArgs(new Object[] { serverManager.getRoomList() });
-			serverManager.writeMessage(socket.getInetAddress().getHostAddress()
+			serverManager.writeMessage(serverManager.getMessageArea(),socket.getInetAddress().getHostAddress()
 					+ " Connected");
 			try {
 				objOutputStream.writeObject(returnPacket);
@@ -129,10 +130,13 @@ public class SCSClientManager extends Thread implements Runnable {
 		}
 	}
 	
-	public int getRoonNum() {
+	public int getRoomNum() {
 		return room.getRoomNum();
 	}
-
+	
+	public String getRoomName(){
+		return room.getRoomName();
+	}
 	
 	public void setRoom(Vector<SCRoom> roomList) {
 		try {
@@ -158,7 +162,7 @@ public class SCSClientManager extends Thread implements Runnable {
 			objInputStream.close();
 			objOutputStream.close();
 			socket.close();
-			serverManager.writeMessage(socket.getInetAddress()
+			serverManager.writeMessage(serverManager.getMessageArea(),socket.getInetAddress()
 					+ " Disconnected");
 			
 			return;
@@ -170,5 +174,9 @@ public class SCSClientManager extends Thread implements Runnable {
 	
 	public void stopManager(){
 		stop = true;
+	}
+	
+	public InetAddress getClientAddress(){
+		return socket.getLocalAddress();
 	}
 }

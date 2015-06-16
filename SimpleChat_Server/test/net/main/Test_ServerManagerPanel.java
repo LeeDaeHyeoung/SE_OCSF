@@ -12,7 +12,7 @@ public class Test_ServerManagerPanel {
 	@Test
 	public void test_writeMessage() {
 		ServerManagerPanel servermanagerpanel = new ServerManagerPanel();
-		servermanagerpanel.writeMessage("server start");
+		servermanagerpanel.writeMessage(servermanagerpanel.getMessageArea(),"server start");
 		Assert.assertEquals(servermanagerpanel.getMessageArea(),"server start");
 	}
 	@Test

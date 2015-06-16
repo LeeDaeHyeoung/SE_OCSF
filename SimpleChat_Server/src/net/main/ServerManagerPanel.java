@@ -132,13 +132,13 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 		this.add(msgBtn);
 	}
 
-	// MessageArea창에 쓰고자하는 메세지를 담당하는 기능 구현
-	public void writeMessage(String m) {
+	// JTextArea창에 쓰고자하는 메세지를 담당하는 기능 구현
+	public void writeMessage(JTextArea area, String m) {
 		Calendar c = Calendar.getInstance();
 		int hour = c.get(Calendar.HOUR_OF_DAY);
 		int min = c.get(Calendar.MINUTE);
 		int sec = c.get(Calendar.SECOND);
-		messageArea.append("[" + new Date(c.getTimeInMillis()) + " " + hour
+		area.append("[" + new Date(c.getTimeInMillis()) + " " + hour
 				+ ":" + min + ":" + sec + "] " + m + "\n");
 	}
 
@@ -152,8 +152,11 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 	}
 
 	// client Area창에 현재 접속해 있는 모든 사람들을 표시해주기위한 메소드
-	public void client_writeMessage(Vector<SCSClientManager> clientList) {
-		client_messageArea.append(clientList.toString() + "\n");
+	public void updateClients() {
+		client_messageArea.setText("Current Client\n");
+		for(SCSClientManager tempList : clientList){
+			client_messageArea.append(tempList.getClientAddress() + "\n");
+		}
 	}
 
 	public void client_writeMessage(String m) {
@@ -167,9 +170,9 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 				try {
 					sSocket = new ServerSocket(Integer.valueOf(portField
 							.getText()), 10);
-					writeMessage("Server Started");
+					writeMessage(messageArea,"Server Started");
 					room_writeMessage("Current Room");
-					client_writeMessage("Current Client");
+					updateClients();
 					infoLabel.setText(" ServerAddress : "
 							+ InetAddress.getLocalHost().getHostAddress());
 					while (!stop) {
@@ -179,7 +182,9 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 								socket, ServerManagerPanel.this);
 						clientManager.start();
 						clientList.add(clientManager);
-						client_writeMessage(clientList);
+						writeMessage(client_messageArea, clientManager.getRoomName());
+						
+						updateClients();
 					}
 				} catch (IOException e) {
 					terminateServer();
@@ -201,7 +206,7 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 		client_writeMessage("All clients is Disconnected");
 		roomList.removeAllElements();
 		room_writeMessage("Terminated All Room");
-		writeMessage("Server Terminated");
+		writeMessage(messageArea,"Server Terminated");
 		infoLabel.setText(" ServerAddress : ");
 	}
 
@@ -213,6 +218,11 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 	}
 
 	public SCRoom createRoom(String roomName) {
+		for(SCRoom scRoom : roomList){
+			if(roomName == scRoom.getRoomName())
+				return scRoom;
+		}
+		
 		SCRoom room = new SCRoom(roomName, roomList.size());
 		roomList.add(room);
 		for (SCSClientManager clientManager : clientList) {
@@ -223,7 +233,7 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 
 	public void enterClient(SCRoom room, String address) {
 		for (SCSClientManager clientManager : clientList) {
-			if (clientManager.getRoonNum() == room.getRoomNum()) {
+			if (clientManager.getRoomNum() == room.getRoomNum()) {
 				clientManager.sendMessage(address + " 가 입장하였습니다.");
 			}
 		}
@@ -231,12 +241,12 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 
 	public void exitClient(SCRoom room, String address) {
 		for (SCSClientManager clientManager : clientList) {
-			if ((clientManager.getRoonNum() == room.getRoomNum())
-					&& (clientManager.getRoonNum() != -1)) {
+			if ((clientManager.getRoomNum() == room.getRoomNum())
+					&& (clientManager.getRoomNum() != -1)) {
 				clientManager.sendMessage(address + " 가 퇴장하였습니다.");
-				room.setRoomNum(-1);
 			}
 		}
+		room.setRoomNum(-1);
 	}
 
 	public void announcement_Allclient() {
@@ -247,8 +257,8 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 
 	public void sendMessge(SCPacket packet, int roomNum) {
 		for (SCSClientManager clientManager : clientList) {
-			if (clientManager.getRoonNum() == roomNum) {
-				System.out.println(clientManager.getRoonNum());
+			if (clientManager.getRoomNum() == roomNum) {
+				System.out.println(clientManager.getRoomNum());
 				clientManager.sendMessage((String) packet.getArgs()[0]);
 			}
 		}
@@ -268,7 +278,7 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 			startServer();
 		} else if (arg0.getActionCommand().equals("Send")) {
 			announcement_Allclient();
-			writeMessage(msgField.getText());
+			writeMessage(messageArea,msgField.getText());
 			msgField.setText("");
 		} else if (arg0.getActionCommand().equals("ServerTerminate")) {
 			try {
@@ -294,15 +304,19 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 	/*
 	 * messageArea값을 확인하기위해서 test를 하기위해서 getter정의
 	 */
-	public String getMessageArea() {
-		return messageArea.toString();
+	public JTextArea getMessageArea() {
+		return messageArea;
 	}
 
 	/*
 	 * room messageArea값을 확인하기위해서 test를 하기위해서 getter정의
 	 */
-	public String getRoom_messageArea() {
-		return room_messageArea.toString();
+	public JTextArea getRoom_messageArea() {
+		return room_messageArea;
+	}
+	
+	public JTextArea getclient_messageArea(){
+		return client_messageArea;
 	}
 
 	/*
