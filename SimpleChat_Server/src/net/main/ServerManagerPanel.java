@@ -203,6 +203,7 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 			temp.destroy();
 			clientList.remove(0);
 		}
+		updateClients();
 		client_writeMessage("All clients is Disconnected");
 		roomList.removeAllElements();
 		room_writeMessage("Terminated All Room");
@@ -329,5 +330,13 @@ public class ServerManagerPanel extends JPanel implements ActionListener,
 	// Server 가동현황을 확인하는 test case에서 사용
 	public String getServerControlBtnMsg() {
 		return serverControlBtn.getText();
+	}
+	
+	public void clientClose(SCSClientManager client){
+		for(SCSClientManager mClient : clientList)
+			if (mClient == client) {
+				clientList.remove(client);
+				updateClients();
+			}
 	}
 }

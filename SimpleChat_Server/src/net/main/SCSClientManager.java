@@ -46,8 +46,10 @@ public class SCSClientManager extends Thread implements Runnable {
 				process(packet);
 				serverManager.run();
 			} catch (Exception e) {
+				destroy();
 			}
 		}
+		// destroy();
 	}
 
 	private void process(SCPacket packet) {
@@ -55,8 +57,8 @@ public class SCSClientManager extends Thread implements Runnable {
 		if (packet.getMessage().equals("applyConnection")) {
 			returnPacket.setMessage("connectionSuccess");
 			returnPacket.setArgs(new Object[] { serverManager.getRoomList() });
-			serverManager.writeMessage(serverManager.getMessageArea(),socket.getInetAddress().getHostAddress()
-					+ " Connected");
+			serverManager.writeMessage(serverManager.getMessageArea(), socket
+					.getInetAddress().getHostAddress() + " Connected");
 			try {
 				objOutputStream.writeObject(returnPacket);
 				objOutputStream.flush();
@@ -73,110 +75,110 @@ public class SCSClientManager extends Thread implements Runnable {
 				objOutputStream.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
-				serverManager.enterClient(room, socket.getInetAddress().getHostAddress());
+				serverManager.enterClient(room, socket.getInetAddress()
+						.getHostAddress());
 			}
-		}
-		else if(packet.getMessage().equals("enterRoom")){
-			room = new SCRoom((SCRoom)packet.getArgs()[0]);
+		} else if (packet.getMessage().equals("enterRoom")) {
+			room = new SCRoom((SCRoom) packet.getArgs()[0]);
 			try {
 				returnPacket.setMessage("enterRoom");
-				returnPacket.setArgs(new Object[]{room});
+				returnPacket.setArgs(new Object[] { room });
 				objOutputStream.writeObject(returnPacket);
 				objOutputStream.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			serverManager.enterClient(room, socket.getInetAddress().getHostAddress());
-		}
-		else if(packet.getMessage().equals("writeMessage")){
+			serverManager.enterClient(room, socket.getInetAddress()
+					.getHostAddress());
+		} else if (packet.getMessage().equals("writeMessage")) {
 			serverManager.sendMessge(packet, room.getRoomNum());
 			returnPacket.setMessage("writtenMessage");
-			returnPacket.setArgs(new Object[]{});
-		}
-		else if(packet.getMessage().equals("exitRoom")){
-			try{
+			returnPacket.setArgs(new Object[] {});
+		} else if (packet.getMessage().equals("exitRoom")) {
+			try {
 				returnPacket.setMessage("exitRoom");
-				returnPacket.setArgs(new Object[]{room});
+				returnPacket.setArgs(new Object[] { room });
 				objOutputStream.writeObject(returnPacket);
 				objOutputStream.flush();
-			} catch(IOException e){
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			serverManager.exitClient(room, socket.getInetAddress().getHostAddress());
+			serverManager.exitClient(room, socket.getInetAddress()
+					.getHostAddress());
 		}
 	}
-	
-	public void sendMessage(String msg){
+
+	public void sendMessage(String msg) {
 		try {
 			SCPacket returnPacket = new SCPacket();
 			returnPacket.setMessage("readMessage");
-			returnPacket.setArgs(new Object[]{msg});
+			returnPacket.setArgs(new Object[] { msg });
 			objOutputStream.writeObject(returnPacket);
 			objOutputStream.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void Announcement(String msg){
+
+	public void Announcement(String msg) {
 		try {
 			SCPacket returnPacket = new SCPacket();
 			returnPacket.setMessage("Annoucement");
-			returnPacket.setArgs(new Object[]{msg});
+			returnPacket.setArgs(new Object[] { msg });
 			objOutputStream.writeObject(returnPacket);
 			objOutputStream.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public int getRoomNum() {
 		return room.getRoomNum();
 	}
-	
-	public String getRoomName(){
+
+	public String getRoomName() {
 		return room.getRoomName();
 	}
-	
+
 	public void setRoom(Vector<SCRoom> roomList) {
 		try {
 			Vector<SCRoom> list = new Vector<SCRoom>();
 			list.addAll(roomList);
 			SCPacket returnPacket = new SCPacket();
 			returnPacket.setMessage("setRoom");
-			returnPacket.setArgs(new Object[]{list});
+			returnPacket.setArgs(new Object[] { list });
 			objOutputStream.writeObject(returnPacket);
 			objOutputStream.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void destroy() {
-		try {
-			SCPacket returnPacket = new SCPacket();
-			returnPacket.setMessage("Terminate");
-			objOutputStream.writeObject(returnPacket);
-			objOutputStream.flush();
-			
-			objInputStream.close();
-			objOutputStream.close();
-			socket.close();
-			serverManager.writeMessage(serverManager.getMessageArea(),socket.getInetAddress()
-					+ " Disconnected");
-			
-			return;
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		stop = true;
+//		try { 
+//			SCPacket returnPacket = new SCPacket();
+//			returnPacket.setMessage("Terminate");
+//			objOutputStream.writeObject(returnPacket);
+//			objOutputStream.flush();
+//			objInputStream.close();
+//			objOutputStream.close();
+//			socket.close();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		serverManager.writeMessage(serverManager.getMessageArea(),
+				socket.getInetAddress() + " Disconnected");
+		serverManager.clientClose(SCSClientManager.this);
+		return;
 	}
-	
-	public void stopManager(){
+
+	public void stopManager() {
 		stop = true;
 	}
-	
-	public InetAddress getClientAddress(){
+
+	public InetAddress getClientAddress() {
 		return socket.getLocalAddress();
 	}
 }
